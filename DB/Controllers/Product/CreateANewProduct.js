@@ -1,19 +1,38 @@
 import { ProductModel } from '../../Model/Product.js'
+import { User } from '../../Model/User.js'
 
 export const CreateProduct = async (req, res) => {
-  const { productName, price, auctionEndDate, status } = req.body
+  const { productName, price, auctionEndDate, status, sellerId } = req.body
 
-  const image = req.file ? req.file.path : null // Get the image path
+  // Validate sellerId
   try {
-    const NewProduct = ProductModel({
+    const user = await User.findById(sellerId)
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    const image = req.file ? req.file.path : null // Get the image path
+
+    const newProduct = new ProductModel({
       productName,
       price,
       auctionEndDate,
       status,
       image,
+      sellerId, // Reference to the User's ObjectId
     })
-    await NewProduct.save()
-    res.status(201).json({ productName, price, auctionEndDate, status, image })
+
+    await newProduct.save()
+
+    res.status(201).json({
+      productName,
+      price,
+      auctionEndDate,
+      status,
+      image,
+      sellerId,
+      user,
+    })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
