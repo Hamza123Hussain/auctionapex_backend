@@ -13,7 +13,6 @@ const app = express() // Create an Express application
 const corsOptions = {
   origin: '*', // Allow requests from any origin; adjust as needed for security
   methods: ['GET', 'POST'], // Allow only GET and POST methods
-  allowedHeaders: ['Content-Type'], // Allow only Content-Type header
 }
 app.use(cors(corsOptions)) // Use CORS middleware with the defined options
 app.use(express.json()) // Middleware to parse JSON request bodies
