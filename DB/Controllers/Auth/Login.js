@@ -1,5 +1,5 @@
 import { generateToken } from '../../../JsonWebToken.js'
-import User from '../../Model/User.js'
+import { User } from '../../Model/User.js'
 import bcrypt from 'bcrypt'
 
 export const Login = async (req, res) => {

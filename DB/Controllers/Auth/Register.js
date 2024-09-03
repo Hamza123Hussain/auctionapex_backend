@@ -1,4 +1,4 @@
-import User from '../../Model/User.js'
+import { User } from '../../Model/User.js'
 export const Signin = async (req, res) => {
   const { username, email, password } = req.body
   const image = req.file ? req.file.path : null // Get the image path
