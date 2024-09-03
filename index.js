@@ -7,9 +7,8 @@ import { connectDB } from './DBconnect.js' // Import database connection functio
 import AuthRouter from './DB/Router/AuthRouter.js' // Import authentication routes
 import path from 'path' // Import path module for handling file paths
 import { fileURLToPath } from 'url' // Import fileURLToPath function for converting URL to file path
-
+import ProductRouter from './DB/Router/ProductRouter.js'
 const app = express() // Create an Express application
-
 // CORS configuration
 const corsOptions = {
   origin: '*', // Allow requests from any origin; adjust as needed for security
@@ -22,13 +21,10 @@ app.use(express.json()) // Middleware to parse JSON request bodies
 // Define __dirname for ES module support
 const __filename = fileURLToPath(import.meta.url) // Get the current module's file path
 const __dirname = path.dirname(__filename) // Get the directory name of the current file
-
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))) // Serve static files from the 'uploads' directory
-
 // Create HTTP server
 const server = http.createServer(app) // Create an HTTP server with the Express app
-
 // Initialize Socket.IO server
 const io = new SocketIOServer(server, {
   cors: {
@@ -36,7 +32,6 @@ const io = new SocketIOServer(server, {
     methods: ['GET', 'POST'], // Allow only GET and POST methods for Socket.IO
   },
 })
-
 // Socket.IO event handling
 io.on('connection', (socket) => {
   console.log('A user connected') // Log when a user connects
@@ -45,13 +40,11 @@ io.on('connection', (socket) => {
     console.log('User disconnected') // Log when a user disconnects
   })
 })
-
 // Use authentication routes
 app.use('/API/AUTH', AuthRouter) // Mount the authentication router on the '/API/AUTH' path
-
+app.use('/API/Product', ProductRouter)
 // Connect to the database
 connectDB() // Establish a connection to the database
-
 // Start the server
 server.listen(Port1, () => {
   console.log(`App and WebSocket server running on http://localhost:${Port1}`) // Log that the server is running
