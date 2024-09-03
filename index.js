@@ -8,6 +8,7 @@ import AuthRouter from './DB/Router/AuthRouter.js' // Import authentication rout
 import path from 'path' // Import path module for handling file paths
 import { fileURLToPath } from 'url' // Import fileURLToPath function for converting URL to file path
 import ProductRouter from './DB/Router/ProductRouter.js'
+import AuctionRouter from './DB/Router/AuctionRouter.js'
 const app = express() // Create an Express application
 // CORS configuration
 const corsOptions = {
@@ -42,6 +43,7 @@ io.on('connection', (socket) => {
 // Use authentication routes
 app.use('/API/AUTH', AuthRouter) // Mount the authentication router on the '/API/AUTH' path
 app.use('/API/Product', ProductRouter)
+app.use('/API/Auction', AuctionRouter)
 // Connect to the database
 connectDB() // Establish a connection to the database
 // Start the server
