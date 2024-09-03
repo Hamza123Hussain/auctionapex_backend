@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 const ProductSchema = new mongoose.Schema({
+  _id: { type: String }, // Use String type for _id
   productName: { type: String, required: true }, // Name of the product
   description: { type: String }, // Description of the product
   price: { type: Number, required: true }, // Starting price for the auction
@@ -10,13 +11,13 @@ const ProductSchema = new mongoose.Schema({
   bids: [
     {
       // Array to store bids placed on the product
-      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+      userId: { type: String, ref: 'users' },
       bidAmount: { type: Number },
       bidTime: { type: Date, default: Date.now },
     },
   ],
   sellerId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'users',
     required: true,
   }, // Seller's ID
