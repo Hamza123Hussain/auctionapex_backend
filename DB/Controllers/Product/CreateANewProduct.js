@@ -1,8 +1,9 @@
+import { normalizePath } from '../../../normalizefunction.js'
 import { ProductModel } from '../../Model/Product.js'
 import { User } from '../../Model/User.js'
 
 export const CreateProduct = async (req, res) => {
-  const { productName, price, auctionEndDate, status, sellerId } = req.body
+  const { productName, price, status, sellerId } = req.body
 
   // Validate sellerId
   try {
@@ -16,7 +17,7 @@ export const CreateProduct = async (req, res) => {
     const newProduct = new ProductModel({
       productName,
       price,
-      auctionEndDate,
+      // auctionEndDate,
       status,
       image,
       sellerId, // Reference to the User's ObjectId
@@ -27,9 +28,9 @@ export const CreateProduct = async (req, res) => {
     res.status(201).json({
       productName,
       price,
-      auctionEndDate,
+      // auctionEndDate,
       status,
-      image,
+      image: normalizePath(image),
       sellerId,
       user,
     })
