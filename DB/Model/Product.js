@@ -7,13 +7,7 @@ const ProductSchema = new mongoose.Schema({
   price: { type: Number, required: true }, // Starting price for the auction
   image: { type: String }, // URL or path to the product image
   auctionEndDate: { type: Date, required: true }, // Date and time when the auction ends
-  bids: [
-    {
-      userId: { type: String }, // Assuming userId is stored as a String
-      bidAmount: { type: Number },
-      bidTime: { type: Date, default: Date.now },
-    },
-  ],
+
   sellerId: {
     type: String, // Assuming sellerId is stored as a String
     required: true,
