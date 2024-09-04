@@ -3,6 +3,7 @@ import { User } from '../../Model/User.js'
 import bcrypt from 'bcrypt'
 import { Auth } from '../../../FireBaseConfig.js'
 import { generateToken } from '../../../JsonWebToken.js'
+import { normalizePath } from '../../../normalizefunction.js'
 
 export const Login = async (req, res) => {
   const { email, password } = req.body
@@ -31,10 +32,10 @@ export const Login = async (req, res) => {
       res.status(200).json({
         token,
         user: {
-          id: findUser._id,
-          name: findUser.username,
+          _id: findUser._id,
+          Name: findUser.username,
           email: findUser.email,
-          image: findUser.image,
+          imageurl: normalizePath(findUser.image),
         },
       })
     }

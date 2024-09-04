@@ -3,41 +3,34 @@ import { User } from '../../Model/User.js'
 import { Auth } from '../../../FireBaseConfig.js'
 
 export const Signin = async (req, res) => {
-  const { username, email, password } = req.body // Extract required fields
+  const { username, email, password } = req.body // Ensure password is extracted
   const image = req.file ? req.file.path : null // Get the image path
 
   if (!password) {
-    // Ensure password is provided
+    // Check if password is provided
     return res.status(400).json({ error: 'Password is required' })
   }
 
   try {
-    // Create user with Firebase Authentication
     const userCredential = await createUserWithEmailAndPassword(
       Auth,
       email,
       password
     )
 
-    // Check if Firebase user ID exists
     if (userCredential.user.uid) {
-      // Create a new MongoDB user document with Firebase user ID
       const newUser = new User({
-        _id: userCredential.user.uid, // Use Firebase user ID as MongoDB user ID
+        _id: userCredential.user.uid,
         username,
         email,
-        password, // Optionally, you may want to store a hashed version of the password instead
+        password,
         image,
       })
 
-      // Save the user document to MongoDB
       await newUser.save()
-
-      // Respond with success
-      res.status(201).json({ username, email, image })
+      res.status(201).json(true)
     }
   } catch (error) {
-    // Handle errors
     res.status(400).json({ error: error.message })
   }
 }
