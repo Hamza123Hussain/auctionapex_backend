@@ -1,26 +1,22 @@
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../../../FirebaseConfig.js'
-export const GetUser = async (req, res) => {
-  const userId = req.query.userId // Use query parameters
+import { User } from '../../Model/User.js'
+export const GettingUser = async (req, res) => {
   try {
-    if (!userId) {
-      return res.status(400).send('User ID is required')
+    const { userID } = req.query // Retrieve userID from query parameters
+    // Ensure the userID is provided
+    if (!userID) {
+      return res.status(400).json({ message: 'User ID is required' })
     }
-    const userDocRef = doc(db, 'Users', userId)
-    // Fetch the document
-    const userDoc = await getDoc(userDocRef)
-    if (userDoc.exists()) {
-      // If the document exists, return the data
-      const userData = userDoc.data()
-      console.log('User Data:', userData)
-      res.status(200).send(userData)
-    } else {
-      // If the document does not exist
-      console.log('No such user document!')
-      res.status(404).send('No such user document!')
+    // Fetch user data from the database
+    const userData = await User.findById(userID)
+    // If no user found, send 404 error
+    if (!userData) {
+      return res.status(404).json({ message: 'User not found' })
     }
+    // Return user data if found
+    return res.status(200).json(userData)
   } catch (error) {
-    console.error('Error fetching user details:', error)
-    res.status(500).send('Error fetching user details')
+    // Catch any error and send a 500 server error response
+    console.error('Error fetching user data:', error)
+    return res.status(500).json({ message: 'Internal Server Error' })
   }
 }
