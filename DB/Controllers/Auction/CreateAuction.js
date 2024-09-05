@@ -13,8 +13,6 @@ export const MakeAuction = async (req, res) => {
       product,
       startDate,
       endDate,
-
-      CheckProduct,
     })
     // Save the auction to the database
     await auction.save()
