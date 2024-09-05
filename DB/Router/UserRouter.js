@@ -1,6 +1,9 @@
 import express from 'express'
-import { GetUser } from '../Controllers/User/GettingUserDetails.js'
+import { GettingUser } from '../Controllers/User/GettingUserDetails.js'
+import { upload } from '../Middleware/Multer.js'
+import { UpdateUser } from '../Controllers/User/UpdateUser.js'
 const UserRouter = express.Router()
-UserRouter.get('/GetUser', GetUser)
+UserRouter.get('/GetUser', GettingUser)
 /**sending userID as a query */
+UserRouter.put('/UpdateUser', upload.single('image'), UpdateUser)
 export default UserRouter

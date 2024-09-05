@@ -9,6 +9,7 @@ import path from 'path' // Import path module for handling file paths
 import { fileURLToPath } from 'url' // Import fileURLToPath function for converting URL to file path
 import ProductRouter from './DB/Router/ProductRouter.js'
 import AuctionRouter from './DB/Router/AuctionRouter.js'
+import UserRouter from './DB/Router/UserRouter.js'
 const app = express() // Create an Express application
 // CORS configuration
 const corsOptions = {
@@ -17,7 +18,6 @@ const corsOptions = {
 }
 app.use(cors(corsOptions)) // Use CORS middleware with the defined options
 app.use(express.json()) // Middleware to parse JSON request bodies
-
 // Define __dirname for ES module support
 const __filename = fileURLToPath(import.meta.url) // Get the current module's file path
 const __dirname = path.dirname(__filename) // Get the directory name of the current file
@@ -25,6 +25,7 @@ const __dirname = path.dirname(__filename) // Get the directory name of the curr
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))) // Serve static files from the 'uploads' directory
 // Create HTTP server
 const server = http.createServer(app) // Create an HTTP server with the Express app
+
 // Initialize Socket.IO server
 const io = new SocketIOServer(server, {
   cors: {
@@ -40,12 +41,16 @@ io.on('connection', (socket) => {
     console.log('User disconnected') // Log when a user disconnects
   })
 })
+
 // Use authentication routes
 app.use('/API/AUTH', AuthRouter) // Mount the authentication router on the '/API/AUTH' path
 app.use('/API/Product', ProductRouter)
 app.use('/API/Auction', AuctionRouter)
+app.use('/API/USER', UserRouter)
+
 // Connect to the database
 connectDB() // Establish a connection to the database
+
 // Start the server
 server.listen(Port1, () => {
   console.log(`App and WebSocket server running on http://localhost:${Port1}`) // Log that the server is running
