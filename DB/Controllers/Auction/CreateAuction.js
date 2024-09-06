@@ -4,9 +4,9 @@ import { User } from '../../Model/User.js'
 export const MakeAuction = async (req, res) => {
   const { product, startDate, endDate } = req.body
   const CheckProduct = await ProductModel.findById(product)
-  // if (!product || !startDate || !endDate) {
-  //   return res.status(400).json({ message: 'Missing required fields' })
-  // }
+  if (!product || !startDate || !endDate) {
+    return res.status(400).json({ message: 'Missing required fields' })
+  }
   try {
     // Create a new auction
     const auction = new AuctionModel({

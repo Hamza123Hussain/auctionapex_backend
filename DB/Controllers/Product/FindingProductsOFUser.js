@@ -11,9 +11,7 @@ export const FindUserProducts = async (req, res) => {
     const userProducts = await ProductModel.find({ sellerId: sellerID })
 
     if (userProducts.length === 0) {
-      return res
-        .status(404)
-        .json({ message: 'No products found for this seller' })
+      return res.status(404).json([])
     }
 
     res.status(200).json(userProducts)
