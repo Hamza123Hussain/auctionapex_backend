@@ -10,6 +10,8 @@ import { fileURLToPath } from 'url' // Import fileURLToPath function for convert
 import ProductRouter from './DB/Router/ProductRouter.js'
 import AuctionRouter from './DB/Router/AuctionRouter.js'
 import UserRouter from './DB/Router/UserRouter.js'
+import { getAllAuctions } from './DB/Controllers/Auction/GetAllAuctions.js'
+import { getSingleAuction } from './DB/Controllers/Auction/GetSingleAuction.js'
 const app = express() // Create an Express application
 // CORS configuration
 const corsOptions = {
@@ -35,10 +37,30 @@ const io = new SocketIOServer(server, {
 })
 // Socket.IO event handling
 io.on('connection', (socket) => {
-  console.log('A user connected') // Log when a user connects
+  console.log('A user connected')
+
+  // Handle AuctionList event
+  socket.on('AuctionList', async () => {
+    try {
+      const AuctionData = await getAllAuctions()
+      io.emit('AuctionListReceived', AuctionData)
+    } catch (error) {
+      console.error('Error fetching user list:', error)
+    }
+  })
+
+  socket.on('SingleAuction', async (AuctionID) => {
+    try {
+      const AuctionData = await getSingleAuction(AuctionID)
+      socket.emit('AuctionData', AuctionData)
+    } catch (error) {
+      console.error('Error fetching chat data:', error)
+    }
+  })
+  // Handle Chat event
   // Handle disconnection
   socket.on('disconnect', () => {
-    console.log('User disconnected') // Log when a user disconnects
+    console.log('User disconnected')
   })
 })
 
