@@ -1,29 +1,29 @@
 import { User } from '../../Model/User.js'
+
 export const UpdateUser = async (req, res) => {
+  console.log('Request body:', req.body)
+  console.log('Uploaded file:', req.file)
+
+  const { username, userID } = req.body
+  const image = req.file ? req.file.path : null
+
+  if (!username || !userID) {
+    return res.status(400).json({ error: 'Username and userID are required' })
+  }
+
   try {
-    const { userID, username } = req.body // Assuming the userID is passed in the request body
-    // Ensure the userID and username are provided
-    if (!userID || !username) {
-      return res
-        .status(400)
-        .json({ message: 'User ID and username are required' })
-    }
-    // Find the user in the database
     const user = await User.findById(userID)
     if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ error: 'User not found' })
     }
-    // Update the username
+
     user.username = username
-    // Check if a file was uploaded (image)
-    if (req.file) {
-      user.image = req.file.path // Update image path or URL
-    }
-    // Save the updated user
+    if (image) user.image = image
+
     await user.save()
-    return res.status(200).json(true)
+    res.status(200).json(user)
   } catch (error) {
-    console.error('Error updating user:', error)
-    return res.status(500).json({ message: 'Internal Server Error' })
+    console.error('Error:', error)
+    res.status(500).json({ error: error.message })
   }
 }

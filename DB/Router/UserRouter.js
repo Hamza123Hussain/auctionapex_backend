@@ -5,5 +5,5 @@ import { UpdateUser } from '../Controllers/User/UpdateUser.js'
 const UserRouter = express.Router()
 UserRouter.get('/GetUser', GettingUser)
 /**sending userID as a query */
-UserRouter.put('/UpdateUser', upload.single('image'), UpdateUser)
+UserRouter.post('/UpdateUser', upload.single('image'), UpdateUser)
 export default UserRouter
