@@ -10,7 +10,7 @@ export const MakeAuction = async (req, res) => {
   try {
     // Create a new auction
     const auction = new AuctionModel({
-      product: '6b216d3a-b612-487e-91d6-30a5b3e88d21',
+      product: product,
       startDate,
       endDate,
     })
